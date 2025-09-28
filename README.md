@@ -89,7 +89,3 @@ for blind users
 also keyboard navigation like tab to move from one element to next element.. shift tab reverse
 
 =========================
-
-
-
-

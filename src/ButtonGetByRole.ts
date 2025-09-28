@@ -19,8 +19,7 @@ import { Browser, chromium, firefox, webkit, Locator, Page, selectors } from "@p
     //input or button ---> role: button
     //link -- role: link
 
-
-
+        
 })();
 
 
