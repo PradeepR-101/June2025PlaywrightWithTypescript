@@ -1,16 +1,31 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('https://www.amazon.com/');
-  await page.getByRole('heading', { name: 'Click the button below to' }).click();
-  await page.getByRole('button', { name: 'Continue shopping' }).click();
-  await page.getByRole('button', { name: 'Submit' }).first().click();
-  await page.getByRole('button', { name: 'Open All Categories Menu' }).click();
-  await page.getByRole('button', { name: 'Computers' }).click();
-  await page.getByRole('link', { name: 'Computers & Tablets' }).click();
-  await page.goto('https://www.amazon.com/');
-  await page.getByRole('button', { name: 'Open All Categories Menu' }).click();
-  await page.getByRole('button', { name: 'Smart Home' }).click();
-  await page.getByRole('button', { name: 'Close menu' }).click();
-  await page.getByRole('link', { name: 'Registry' }).click();
+
+  
+  let s = "rajanna";
+
+  let str = s.slice(0,4).toUpperCase()+s.slice(4).toLowerCase();
+
+  console.log(str)
+
+  const users = [
+  {id:101,name:"Ravi"},
+  {id:102,name:"Karthik"},
+  {id:103,name:"Vijay"}
+];
+
+const idsList = users.map(e=>{
+    return e.id;
+})
+
+for(let id of idsList){
+    console.log(id)
+}
+
+  
+  
+
 });
+
+
