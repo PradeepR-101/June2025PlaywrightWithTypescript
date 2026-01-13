@@ -68,9 +68,15 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     //page.waitForURL('url value');
 
     //waitForFunction(3000);//static wait - bad practice
+    await page.waitForFunction(() => document.querySelector('#status')?.textContent === 'Ready');
 
     //waitForRequest(3000);//static wait - bad practice
+    await page.waitForRequest('**/api/login');
+    await page.waitForRequest(request => request.url().includes('/api/data') && request.method() === 'POST');
 
     //waitForResponse(3000);//static wait - bad practice
+    await page.waitForResponse(response => response.url().includes('/api/data') && response.status() === 200);
+
+
 
 })();
