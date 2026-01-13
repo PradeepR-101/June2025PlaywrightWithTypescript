@@ -67,6 +67,10 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     //wait for url:
     //page.waitForURL('url value');
 
+    //waitForFunction(3000);//static wait - bad practice
 
-  
+    //waitForRequest(3000);//static wait - bad practice
+
+    //waitForResponse(3000);//static wait - bad practice
+
 })();
