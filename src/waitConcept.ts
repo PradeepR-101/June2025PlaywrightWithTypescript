@@ -2,8 +2,8 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
 
 (async () => {
     const browser = await chromium.launch({ channel: 'chrome', headless: false });
-    
-    
+
+
     let page: Page = await browser.newPage();
     page.setDefaultTimeout(10000);//imp wait - global wait 
 
@@ -29,10 +29,10 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     //--> enable
     //clickable
 
-   // await firstname.fill('testing'); //error will be thrown -
+    // await firstname.fill('testing'); //error will be thrown -
     //Timeout 10000ms exceeded.
     //  - waiting for locator
-    
+
     //no need to write the wait if we are performing any action on the locator
 
     //
@@ -48,9 +48,9 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     //    expect(page.locator(`#successmesg)).toBeVisible();
 
 
-     //wait for Selector from page lib:
-     //legacy + not a good practice to use
-        //only xpath/css/text/htmltag
+    //wait for Selector from page lib:
+    //legacy + not a good practice to use
+    //only xpath/css/text/htmltag
     (await page.waitForSelector('#input-firstname')).fill('Testing');
 
     //waitFor() --> locator -- any kind of locators - pw=semantic roles
@@ -63,19 +63,84 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
 
     //dialog, popup
     // page.waitForEvent()
-    
+    //download, popup, dialog, worker,  frameattached, framedetached, framenavigated, request, response, websocket, close, console 
+    // Start waiting for download before clicking. Note no await.
+    const downloadPromise = page.waitForEvent('download');
+    await page.getByText('Download file').click();
+    const download = await downloadPromise;
+
+    // Wait for a popup
+    const popup = await page.waitForEvent('popup');
+
+    // Wait for a console message
+    const consoleMsg = await page.waitForEvent('console');
+    console.log(consoleMsg.text());
+
+    // Wait for a network request
+    const request = await page.waitForEvent('request');
+    console.log(request.url());
+
+    // Wait for a dialog
+    const dialog = await page.waitForEvent('dialog');
+    await dialog.dismiss();
+
+
     //wait for url:
     //page.waitForURL('url value');
 
+    await page.click('a.delayed-navigation'); // Clicking the link will indirectly cause a navigation
+    await page.waitForURL('**/target.html', { waitUntil: 'load' });
+
     //waitForFunction(3000);//static wait - bad practice
     await page.waitForFunction(() => document.querySelector('#status')?.textContent === 'Ready');
+
+    //I use waitForFunction when I need to wait for a custom condition, like a text change, 
+    // a global variable being set, or a spinner disappearing.
+
+    // Wait until a button becomes enabled
+    await page.waitForFunction(() => {
+        const btn = document.querySelector('#submit');
+        return btn && !btn.hasAttribute('disabled');
+    });
+
+    // Wait until a global variable is set
+    await page.waitForFunction(() => (window as any).dataLoaded === true);
+
+    // Wait until a list has at least 10 items
+    await page.waitForFunction(() => {
+        return document.querySelectorAll('.list-item').length >= 10;
+    });
+
 
     //waitForRequest(3000);//static wait - bad practice
     await page.waitForRequest('**/api/login');
     await page.waitForRequest(request => request.url().includes('/api/data') && request.method() === 'POST');
 
+    // Start waiting for request before clicking. Note no await.
+    const requestPromise = page.waitForRequest('https://example.com/resource');
+    await page.getByText('trigger request').click();
+    const request1 = await requestPromise;
+
+    // Alternative way with a predicate. Note no await.
+    const requestPromise1 = page.waitForRequest(request =>
+        request.url() === 'https://example.com' && request.method() === 'GET',
+    );
+    await page.getByText('trigger request').click();
+    const request2 = await requestPromise;
+
     //waitForResponse(3000);//static wait - bad practice
     await page.waitForResponse(response => response.url().includes('/api/data') && response.status() === 200);
+
+    // Start waiting for response before clicking. Note no await.
+    const responsePromise = page.waitForResponse('https://example.com/resource');
+    await page.getByText('trigger response').click();
+    const response = await responsePromise;
+
+    // Alternative way with a predicate. Note no await.
+    const responsePromise1 = page.waitForResponse(response =>
+        response.url() === 'https://example.com' && response.status() === 200
+        && response.request().method() === 'GET'
+    );
 
 
 
