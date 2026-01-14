@@ -97,11 +97,11 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     //I use waitForFunction when I need to wait for a custom condition, like a text change, 
     // a global variable being set, or a spinner disappearing.
 
-    // Wait until a button becomes enabled
+    // Wait until the submit button is enabled
     await page.waitForFunction(() => {
         const btn = document.querySelector('#submit');
         return btn && !btn.hasAttribute('disabled');
-    });
+    }, { timeout: 5000 });
 
     // Wait until a global variable is set
     await page.waitForFunction(() => (window as any).dataLoaded === true);
@@ -110,6 +110,18 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     await page.waitForFunction(() => {
         return document.querySelectorAll('.list-item').length >= 10;
     });
+
+    // Wait until the status element's text becomes "Completed"
+    await page.waitForFunction(() => {
+        const statusEl = document.querySelector('#status');
+        return statusEl?.textContent === 'Completed';
+    }, { timeout: 5000 });
+
+    // Wait until a global JS variable is set to true
+    await page.waitForFunction(() => (window as any).appReady === true, { timeout: 10000 });
+
+    // Wait until the loading spinner is removed from the DOM
+    await page.waitForFunction(() => !document.querySelector('.loading-spinner'), { timeout: 8000 });
 
 
     //waitForRequest(3000);//static wait - bad practice
