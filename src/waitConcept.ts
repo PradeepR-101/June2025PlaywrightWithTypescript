@@ -123,7 +123,8 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     // Wait until the loading spinner is removed from the DOM
     await page.waitForFunction(() => !document.querySelector('.loading-spinner'), { timeout: 8000 });
 
-
+    //waitForRequest & waitForResponse
+    //https://www.youtube.com/watch?v=pL0PUFdCg6w
     //waitForRequest(3000);//static wait - bad practice
     await page.waitForRequest('**/api/login');
     await page.waitForRequest(request => request.url().includes('/api/data') && request.method() === 'POST');
@@ -139,6 +140,19 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
     );
     await page.getByText('trigger request').click();
     const request2 = await requestPromise;
+
+    //realtime example
+    //waiting for add to cart api call response after clicking on add to cart button 
+    // before proceeding to checkout page on cliking on checkout
+    //bcz checkout page needs cart data to load the page properly
+    //bcz chckout api dependent on cart api and in realtime always one api call is dependent on another api call
+    //bcz of network latency issues sometimes cart api response is delayed
+    //bcz of this wait we are able to avoid flaky issues in the test
+    //if we not wait for cart api response chances are there cart data is not loaded properly before loading checkout page
+    await page.getByText('Add to Cart').click();
+    await page.waitForResponse(response => response.url().includes('/cart/add') && response.status() === 200);
+    await page.getByText('Checkout').click();
+
 
     //waitForResponse(3000);//static wait - bad practice
     await page.waitForResponse(response => response.url().includes('/api/data') && response.status() === 200);
