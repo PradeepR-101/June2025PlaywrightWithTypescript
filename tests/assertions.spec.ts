@@ -26,6 +26,13 @@ test('locator based assertions', async ({ page}) => {
     await expect(emailId).toHaveAttribute('id', 'input-email');
     await expect(emailId).toHaveCSS('height', '34px');
 
+    // await expect(emailId).toHaveId('input-email');
+    // await expect(emailId).toHaveClass(/form-control/);
+    // await expect(locator).toContainClass();             //Element has specified CSS classes
+
+    //await expect(locator).toHaveValue()	//Input has a value
+    //await expect(locator).toHaveValues()	//Select has options selected
+
     let footerLinks = page.locator('//footer//a');
     await expect(footerLinks).toHaveCount(16);
     
@@ -92,6 +99,15 @@ test('element is visible, enabled, disabled assertions', async ({ page}) => {
     await expect(checkbox).toBeChecked();
     await expect(submitBtn).toBeEnabled({timeout: 10000});
     await expect(submitBtn).toBeVisible();
+
+    // await expect(locator).toBeHidden();
+    // await expect(locator).toBeEditable();
+    // await expect(locator).toBeFocused();
+    // await expect(locator).toBeSelected();
+    // await expect(locator).toBeEmpty();
+    // await expect(locator).toBeAttached();
+    // await expect(locator).toBeDetached();
+
 
    await page.pause();
 

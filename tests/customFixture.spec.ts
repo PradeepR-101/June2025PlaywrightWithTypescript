@@ -33,3 +33,4 @@ let test = base.extend<{ loginPage: Page }>({
 test('invalid login', async ({ loginPage }) => {
     await expect( loginPage.locator(`#account-login > div.alert`)).toBeVisible();
 })
+

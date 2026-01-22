@@ -168,6 +168,19 @@ import { chromium, Dialog, expect, Locator, Page } from "@playwright/test";
         && response.request().method() === 'GET'
     );
 
+    //diff waitForRequest & waitForResponse
+    //waitForRequest: wait for the network request to be sent from the browser to the server
+    //waitForResponse: wait for the network response to be received from the server to the browser
 
 
+    // 1. page.waitForRequest()
+    //     - Purpose: Waits until a specific network request is made.
+    //     - Trigger Point: As soon as the browser sends the request.
+    //     - Usage: Helpful when you want to verify that a request was initiated(e.g., an API call or resource fetch)
+    // 2. page.waitForResponse()
+    //     - Purpose: Waits until a specific network response is received.
+    //     - Trigger Point: When the browser receives the response from the server.
+    //     - Usage: Useful when you need to ensure that a request has completed and you want to validate the response data or status.
+
+    
 })();
